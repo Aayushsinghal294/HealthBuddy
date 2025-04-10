@@ -17,4 +17,5 @@ theme: {
 },
 
   plugins: [tailwindcss(),react()],
+  server:{port:5173}
 })
