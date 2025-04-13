@@ -21,11 +21,11 @@ const [token, setToken] = useState(true)
             <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto'/>
         </NavLink>
         <NavLink to='/about'>
-            <li className='py-1'>ABOUT</li>
+            <li className='py-1'>SEARCH</li>
             <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto'/>
         </NavLink>
         <NavLink to='/contact'>
-            <li className='py-1'>CONTACT</li>
+            <li className='py-1'>MAPS</li>
             <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto'/>
         </NavLink>
       </ul>

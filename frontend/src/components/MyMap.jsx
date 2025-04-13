@@ -124,7 +124,7 @@ const MyMap = () => {
                 setHasLocation(true);
                 fetchHospitals(coords[0], coords[1]);
             },
-            (err) => console.error('Geolocation error:', err)
+            (err) => alert("Please enable location services to use this feature.")
         );
     };
 
