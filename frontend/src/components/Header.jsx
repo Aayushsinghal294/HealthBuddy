@@ -1,24 +1,51 @@
-import React from 'react'
-import { assets } from '../assets/asset'
+import React from "react";
+import { assets } from "../assets/asset";
+import HandBackground from "./HandBackground";
 
 const Header = () => {
   return (
-    <div className='flex flex-col md:flex-row flex-wrap bg-emerald-500 rounded-lg px-6 md:px-10 lg:px-20'>
-        <div className='md:w-1/2 flex flex-col items-start justify-center gap-4 py-10 m-auto md:py-[10vw] md:mb-[-30px]'>
-      <p className='text-3xl md:text-4xl lg:text-5xl text-white font-semibold leading-tight md:leading-tight lg:leading-tight'>  Find Fastest Treatment <br/> With Best Hospitals </p>
-      <div className='flex flex-xol md:flex-row items-center gap-3 text-white text-1.5xl font-light '>
-        <img className='w-25 rounded' src={assets.docicon} alt="" />
-        <p>Get the fastest hospital by calculating <br className='hidden sm:block' />queue time + travel time.</p>
-      </div>
-      <a href="#disease" className='flex items-center gap-2 bg-white mt-1 px-8 py-3 rounded-full text-gray-600 text-1xl m-auto md:m-0 hover:scale-105 transition-all duration-300'>
-        Find Hospitals  <img className='w-3' src={assets.arrow} alt="" />
-      </a>
-      </div>
-      <div className='md:w-1/2 relative'>
-        <img className='w-full md:absolute bottom-0 h-auto rounded-lg ' src={assets.h1} alt="" />
-      </div>
-    </div>
-  )
-}
+    <section className="relative bg-yellow-50 px-6 md:px-10 lg:px-36 py-16 overflow-hidden">
+      <HandBackground />
 
-export default Header
+      <div className="flex flex-col md:flex-row items-center justify-between gap-10 relative z-10">
+        {/* Left Section - Text */}
+        <div className="md:w-1/2 flex flex-col gap-6 text-left">
+          <h1
+            className="text-4xl md:text-4xl  text-gray-800 leading-tight"
+            style={{
+              fontFamily: "sharp-sans-medium, fallback-font, Arial, sans-serif",
+            }}
+          >
+            Find the Best Hospitals <br /> Right When You Need One
+          </h1>
+
+          <p
+            className="text-lg text-gray-800"
+            style={{
+              fontFamily: "sharp-sans-medium, fallback-font, Arial, sans-serif",
+            }}
+          >
+            No wait, no guesswork. Instantly compare hospitals by queue time,
+            distance, and treatment specialties — all in one place.
+          </p>
+
+          <a
+            href="#disease"
+            className="inline-flex items-center gap-2 bg-emerald-500 text-white px-6 py-3 rounded-full font-medium hover:bg-emerald-600 transition duration-300 w-fit"
+            style={{
+              fontFamily: "sharp-sans-medium, fallback-font, Arial, sans-serif",
+            }}
+          >
+            Find Hospitals
+            <img className="w-3" src={assets.arrow} alt="arrow" />
+          </a>
+        </div>
+
+        {/* Right Section - Image */}
+        <div className="px-20 md:w-1/2"></div>
+      </div>
+    </section>
+  );
+};
+
+export default Header;

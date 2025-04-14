@@ -1,55 +1,228 @@
-import React, { useState } from 'react'
-import {assets} from '../assets/asset'
-import { NavLink, useNavigate } from 'react-router-dom'
+import React, { useState, useContext, useRef, useEffect } from "react";
+import { assets } from "../assets/asset";
+import { NavLink, useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+
 const Navbar = () => {
+  const navigate = useNavigate();
+  const [token, setToken] = useState(true);
+  const { hospitals } = useContext(AppContext);
 
-const navigate = useNavigate();
+  const [query, setQuery] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const inputRef = useRef(null);
 
-const [showMenu, setShowMenu] = useState(false)
-const [token, setToken] = useState(true)
+  const data = [
+    "Allergy",
+    "Anxiety",
+    "Asthma",
+    "Back Pain",
+    "Chest Pain",
+    "Cold and Fever",
+    "Cough",
+    "Delusion",
+    "Depression",
+    "Diarrhea",
+    "Eye Infection",
+    "Fracture",
+    "Headache",
+    "High Blood Pressure",
+    "Joint Pain",
+    "Kuch-Kuch Hota Hai",
+    "Love",
+    "Low Blood Sugar",
+    "Migraine",
+    "Skin Rash",
+    "Sore Throat",
+    "Stomach Ache",
+    "Toothache",
+    "Viral Disease",
+    "Heart Problem",
+    "Respiratory Disease",
+    "Skin Diseases",
+    "Common Cold",
+    "Sun-Stroke",
+  ];
+
+  const filteredData = data.filter((item) =>
+    item.toLowerCase().includes(query.toLowerCase())
+  );
+
+  useEffect(() => setHighlightedIndex(0), [query]);
+
+  const handleSelect = (item) => {
+    setQuery("");
+    setShowDropdown(false);
+    inputRef.current.blur();
+    navigate("/search-results", { state: { disease: item } }); // ✅ Redirect to results page
+  };
+
+  const handleKeyDown = (e) => {
+    if (!showDropdown) return;
+    const max = filteredData.length - 1;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedIndex((prev) => (prev < max ? prev + 1 : 0));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : max));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (filteredData.length) handleSelect(filteredData[highlightedIndex]);
+    }
+  };
 
   return (
-    <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
-  <img onClick={()=>navigate('/')} className='w-55 h-35 cursor-pointer' src={assets.logo} alt="" />
-      <ul className='hidden md:flex items-start gap-5 font-medium'>
-        <NavLink to='/'>
-            <li className='py-1'>HOME</li>
-            <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto'/>
+    <nav className="flex flex-col gap-2 md:flex-row md:items-center justify-between px-6 py-4 shadow-md bg-yellow-300 sticky top-0 z-50">
+      <div className="flex items-center justify-between w-full md:w-auto">
+        <img
+          onClick={() => navigate("/")}
+          className="h-10 cursor-pointer"
+          src={assets.logo}
+          alt="Logo"
+        />
+      </div>
+
+      <ul className="hidden md:flex items-center gap-6 text-gray-700 font-medium text-sm">
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive
+              ? "text-emerald-600 font-semibold"
+              : "hover:text-emerald-500"
+          }
+        >
+          HOME
         </NavLink>
-        <NavLink to='/doctors'>
-            <li className='py-1'>ALL HOSPITALS</li>
-            <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto'/>
+        <NavLink
+          to="/doctors"
+          className={({ isActive }) =>
+            isActive
+              ? "text-emerald-600 font-semibold"
+              : "hover:text-emerald-500"
+          }
+        >
+          ALL HOSPITALS
         </NavLink>
-        <NavLink to='/about'>
-            <li className='py-1'>SEARCH</li>
-            <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto'/>
+        <NavLink
+          to="/about"
+          className={({ isActive }) =>
+            isActive
+              ? "text-emerald-600 font-semibold"
+              : "hover:text-emerald-500"
+          }
+        >
+          SEARCH
         </NavLink>
-        <NavLink to='/contact'>
-            <li className='py-1'>MAPS</li>
-            <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto'/>
+        <NavLink
+          to="/contact"
+          className={({ isActive }) =>
+            isActive
+              ? "text-emerald-600 font-semibold"
+              : "hover:text-emerald-500"
+          }
+        >
+          MAPS
         </NavLink>
       </ul>
-      <div className='flex items-center gap-4'>
-        { 
-          token
-          ? <div className='flex items-center gap-2 cursor-pointer group relative'>
-            <img className='w-15 rounded-full' src={assets.profpic} alt="" />
-            <img className='w-4.5' src={assets.dropdown} alt="" />
-            <div className='absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 hidden group-hover:block'>
-              <div className='min-w-48 bg-stoen-100 rounded flex flex-col gap-4 p-4'>
-                <p onClick={()=>navigate('my-profile')} className='hover:text-black cursor-pointer'>My Profile</p>
-                <p onClick={()=>navigate('my-appointments')} className='hover:text-black cursor-pointer'>My Appointments</p>
-                <p onClick={()=>setToken(false)} className='hover:text-black cursor-pointer'>Logout</p>
-              </div>
+
+      <div className="relative w-full rounded-xl bg-amber-50 md:w-80 mt-2 md:mt-0">
+        <input
+          type="text"
+          placeholder="Search disease..."
+          className="w-full p-2 rounded-xl border border-gray-300 text-sm"
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setShowDropdown(true);
+          }}
+          onFocus={() => setShowDropdown(true)}
+          onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
+          onKeyDown={handleKeyDown}
+          ref={inputRef}
+        />
+        {query && (
+          <button
+            onMouseDown={() => {
+              setQuery("");
+              inputRef.current.focus();
+            }}
+            className="absolute right-3 top-2 text-gray-500 hover:text-black font-bold text-lg"
+          >
+            ×
+          </button>
+        )}
+        {showDropdown && (
+          <ul className="absolute z-10 mt-1 bg-white border border-gray-300 rounded w-full max-h-60 overflow-y-auto shadow-lg">
+            {filteredData.length > 0 ? (
+              filteredData.map((item, i) => (
+                <li
+                  key={i}
+                  className={`px-4 py-2 text-sm cursor-pointer 
+                    ${
+                      i === highlightedIndex
+                        ? "bg-emerald-800 text-white"
+                        : "hover:bg-emerald-800 hover:text-white"
+                    }`}
+                  onMouseEnter={() => setHighlightedIndex(i)}
+                  onMouseDown={() => handleSelect(item)}
+                >
+                  {item}
+                </li>
+              ))
+            ) : (
+              <li className="px-4 py-2 text-sm text-red-500">
+                No results found
+              </li>
+            )}
+          </ul>
+        )}
+      </div>
+
+      <div className="flex items-center gap-4 mt-2 md:mt-0">
+        {token ? (
+          <div className="relative group cursor-pointer">
+            <div className="flex items-center gap-2">
+              <img
+                className="w-9 h-9 rounded-full object-cover"
+                src={assets.profpic}
+                alt="Profile"
+              />
+              <img className="w-4" src={assets.dropdown} alt="Dropdown" />
+            </div>
+            <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow-md p-4 hidden group-hover:block z-10 w-48 text-sm text-gray-700">
+              <p
+                onClick={() => navigate("my-profile")}
+                className="hover:text-emerald-600 py-1 cursor-pointer"
+              >
+                My Profile
+              </p>
+              <p
+                onClick={() => navigate("my-appointments")}
+                className="hover:text-emerald-600 py-1 cursor-pointer"
+              >
+                My Appointments
+              </p>
+              <p
+                onClick={() => setToken(false)}
+                className="hover:text-red-500 py-1 cursor-pointer"
+              >
+                Logout
+              </p>
             </div>
           </div>
-          :<button onClick={()=>navigate('/login')} className='bg-emerald-500 text-white px-8 py-3 rounded-full font-light hidden md:block'>SignUp / Login</button>
-
-        }
-        
+        ) : (
+          <button
+            onClick={() => navigate("/login")}
+            className="bg-emerald-500 text-white px-6 py-2 rounded-full hover:bg-emerald-600 transition duration-300 hidden md:block"
+          >
+            Sign Up / Login
+          </button>
+        )}
       </div>
-    </div>
-  )
-}
+    </nav>
+  );
+};
 
-export default Navbar
+export default Navbar;
