@@ -6,6 +6,7 @@ import About from "./pages/About";
 import Doctors from "./pages/Doctors";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
+import SearchResults from "./components/SearchResult.jsx";
 
 import MyAppointments from "./pages/MyAppointments";
 import MyProfile from "./pages/MyProfile";
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/my-appointments" element={<MyAppointments />} />
         <Route path="/my-profile" element={<MyProfile />} />
         <Route path="/appointment/:docId" element={<Appointment />} />
+        <Route path="/search-results" element={<SearchResults />} />
       </Routes>
     </div>
   );

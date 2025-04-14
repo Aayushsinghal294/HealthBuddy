@@ -22,20 +22,20 @@ const Diseasemenu = () => {
       </p>
 
       {/* Scrollable Grid of Disease Tiles */}
-      <div className="flex gap-4 pt-6 w-full overflow-x-auto sm:overflow-x-hidden flex-wrap justify-center scroll-smooth hide-scrollbar">
+      <div className="flex gap-8 pt-6 w-full overflow-x-auto sm:overflow-x-hidden flex-wrap justify-center scroll-smooth hide-scrollbar">
         {diseasedata.map((item, index) => (
           <Link
             key={index}
             to={`/doctors/${item.disease}`}
             onClick={() => scrollTo(0, 0)}
-            className="w-28 sm:w-32 md:w-36 flex-shrink-0 bg-[#F9F9F9] rounded-xl shadow hover:shadow-md transition-transform duration-300 hover:-translate-y-1 flex flex-col items-center justify-center p-4 text-center cursor-pointer"
+            className="w-28 sm:w-32 md:w-36 flex-shrink-0 flex flex-col items-center justify-center p-2 text-center cursor-pointer transition-transform duration-300 hover:-translate-y-1"
           >
             <img
               src={item.image}
               alt={item.disease}
-              className="w-12 h-12 object-contain mb-2"
+              className="w-40 h-20 object-contain mb-2"
             />
-            <p className="text-sm font-medium text-gray-800">{item.disease}</p>
+            <p className="text-sm font-medium text-gray-700">{item.disease}</p>
           </Link>
         ))}
       </div>

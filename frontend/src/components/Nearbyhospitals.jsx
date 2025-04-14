@@ -28,7 +28,7 @@ const Nearbyhospitals = () => {
               alt={item.name}
               className="h-48 w-full object-cover rounded-t-2xl"
             />
-            <div className="p-4 flex flex-col gap-2">
+            <div className="p-4 flex flex-col gap-2 flex-grow">
               <div className="flex items-center gap-2 text-sm text-green-600 font-medium">
                 <span className="w-2 h-2 bg-green-500 rounded-full inline-block" />
                 Open Now
@@ -38,6 +38,19 @@ const Nearbyhospitals = () => {
               <button className="mt-2 bg-emerald-500 text-white px-4 py-2 rounded-full text-sm w-fit hover:bg-emerald-600 transition">
                 Book Now
               </button>
+
+              <div className="flex items-center justify-between mt-4 text-sm">
+                <p className="text-blue-700 font-medium">
+                  Total time: {parseInt(item.queue) + parseInt(item.travel)}{" "}
+                  mins
+                  <span className="text-xs text-gray-500 ml-1">
+                    (Queue + Travel)
+                  </span>
+                </p>
+                <p className="text-yellow-600 font-semibold">
+                  ⭐ {item.rating} / 5
+                </p>
+              </div>
             </div>
           </div>
         ))}
