@@ -181,7 +181,7 @@ const MyMap = () => {
   };
 
   return (
-    <div style={{ height: "500px", width: "100%", position: "relative" }}>
+    <div style={{ height: "840px", width: "100%", position: "relative" }}>
       <MapContainer
         center={position}
         zoom={13}
