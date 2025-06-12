@@ -8,10 +8,9 @@ const Header = () => {
       <HandBackground />
 
       <div className="flex flex-col md:flex-row items-center justify-between gap-10 relative z-10">
-        {/* Left Section - Text */}
         <div className="md:w-1/2 flex flex-col gap-6 text-left">
           <h1
-            className="text-4xl md:text-4xl  text-gray-700 leading-tight"
+            className="text-4xl md:text-4xl  text-gray-600 leading-tight"
             style={{
               fontFamily: "sharp-sans-medium, fallback-font, Arial, sans-serif",
             }}
