@@ -40,7 +40,6 @@ const Header = () => {
           </a>
         </div>
 
-        {/* Right Section - Image */}
         <div className="px-20 md:w-1/2"></div>
       </div>
     </section>
