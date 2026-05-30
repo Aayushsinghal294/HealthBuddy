@@ -5,14 +5,17 @@ import Dashboard from './pages/Admin/Dashboard';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AdminContext } from './context/AdminContext';
+import { DoctorContext } from './context/DoctorContext';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import AllAppointments from './pages/Admin/AllAppointments';
 import AddDoctor from './pages/Admin/AddDoctor';
 import DoctorsList from './pages/Admin/DoctorsList';
+import HospitalStatus from './pages/Doctor/HospitalStatus';
 
 const App = () => {
   const { aToken } = useContext(AdminContext);
+  const { hToken } = useContext(DoctorContext);
 
   return (
     <>
@@ -32,6 +35,14 @@ const App = () => {
               </Routes>
             </div>
           </div>
+        </div>
+      ) : hToken ? (
+        <div className="min-h-screen bg-[#F8F9FD]">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<HospitalStatus />} />
+            <Route path="*" element={<HospitalStatus />} />
+          </Routes>
         </div>
       ) : (
         <Login />

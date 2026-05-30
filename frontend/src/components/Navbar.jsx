@@ -5,8 +5,7 @@ import { AppContext } from "../context/AppContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [token, setToken] = useState(true);
-  const { hospitals } = useContext(AppContext);
+  const { hospitals, user, logout } = useContext(AppContext);
 
   const [query, setQuery] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
@@ -74,7 +73,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex flex-col gap-2 md:flex-row md:items-center justify-between px-6 py-4 shadow-md bg-yellow-300 sticky top-0 z-50">
+    <nav className="flex flex-col gap-3 md:flex-row md:items-center justify-between px-4 md:px-8 py-3 sticky top-0 z-50 bg-white glass">
       <div className="flex items-center justify-between w-full md:w-auto">
         <img
           onClick={() => navigate("/")}
@@ -83,6 +82,14 @@ const Navbar = () => {
           alt="Logo"
         />
       </div>
+
+      <button
+        className="md:hidden px-2 py-1 text-gray-600"
+        onClick={() => setShowDropdown((s) => !s)}
+        aria-label="Open menu"
+      >
+        ☰
+      </button>
 
       <ul className="hidden md:flex items-center gap-6 text-gray-700 font-medium text-sm">
         <NavLink
@@ -181,12 +188,12 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-4 mt-2 md:mt-0">
-        {token ? (
+        {user ? (
           <div className="relative group cursor-pointer">
             <div className="flex items-center gap-2">
               <img
                 className="w-9 h-9 rounded-full object-cover"
-                src={assets.profpic}
+                src={user?.image || assets.profpic}
                 alt="Profile"
               />
               <img className="w-4" src={assets.dropdown} alt="Dropdown" />
@@ -205,7 +212,7 @@ const Navbar = () => {
                 My Appointments
               </p>
               <p
-                onClick={() => setToken(false)}
+                onClick={() => { logout(); navigate('/') }}
                 className="hover:text-red-500 py-1 cursor-pointer"
               >
                 Logout
@@ -215,12 +222,24 @@ const Navbar = () => {
         ) : (
           <button
             onClick={() => navigate("/login")}
-            className="bg-emerald-500 text-white px-6 py-2 rounded-full hover:bg-emerald-600 transition duration-300 hidden md:block"
+            className="bg-[var(--brand-500)] text-white px-6 py-2 rounded-full hover:brightness-95 transition duration-300 hidden md:block"
           >
             Sign Up / Login
           </button>
         )}
       </div>
+
+      {/* Mobile menu */}
+      {showDropdown && (
+        <div className="md:hidden mt-2 bg-white w-full p-4 border-t">
+          <ul className="flex flex-col gap-3">
+            <li onClick={() => navigate('/')} className="py-2">Home</li>
+            <li onClick={() => navigate('/doctors')} className="py-2">All Hospitals</li>
+            <li onClick={() => navigate('/about')} className="py-2">Search</li>
+            <li onClick={() => navigate('/contact')} className="py-2">Maps</li>
+          </ul>
+        </div>
+      )}
     </nav>
   );
 };

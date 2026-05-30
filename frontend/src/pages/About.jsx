@@ -47,11 +47,14 @@ const SearchComponent = () => {
     item.toLowerCase().includes(query.toLowerCase())
   );
 
+  const getBedsAvailable = (hospital) => hospital.bedsAvailable ?? hospital.queue ?? 0;
+  const getWaitMinutes = (hospital) => hospital.estimatedWaitMins ?? hospital.travel ?? 0;
+
   const matchedHospitals = hospitals
     .filter((h) => h.disease === selectedValue)
     .sort((a, b) => {
-      const totalA = parseInt(a.queue) + parseInt(a.travel);
-      const totalB = parseInt(b.queue) + parseInt(b.travel);
+      const totalA = Number(getBedsAvailable(a)) + Number(getWaitMinutes(a));
+      const totalB = Number(getBedsAvailable(b)) + Number(getWaitMinutes(b));
       if (totalA === totalB) {
         return parseFloat(b.rating) - parseFloat(a.rating);
       }
@@ -147,8 +150,8 @@ const SearchComponent = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
               {matchedHospitals
                 .sort((a, b) => {
-                  const totalA = parseInt(a.queue) + parseInt(a.travel);
-                  const totalB = parseInt(b.queue) + parseInt(b.travel);
+                  const totalA = Number(getBedsAvailable(a)) + Number(getWaitMinutes(a));
+                  const totalB = Number(getBedsAvailable(b)) + Number(getWaitMinutes(b));
 
                   // If total time is the same, sort by rating in descending order
                   if (totalA === totalB) {
@@ -180,9 +183,9 @@ const SearchComponent = () => {
                       <div className="flex items-center justify-between mt-2">
                         <p className="text-sm text-blue-700 font-medium">
                           Total time:{" "}
-                          {parseInt(item.queue) + parseInt(item.travel)} mins
+                          {Number(getBedsAvailable(item)) + Number(getWaitMinutes(item))} mins
                           <span className="text-xs text-gray-500 ml-1">
-                            (Queue + Travel)
+                            (Beds + Wait)
                           </span>
                         </p>
                         <p className="text-sm text-yellow-600 font-semibold">

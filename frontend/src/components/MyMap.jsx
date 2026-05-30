@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -9,7 +9,9 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import axios from "axios";
+import polyline from "polyline";
 import "leaflet/dist/leaflet.css";
+import { AppContext } from "../context/AppContext";
 
 // Red marker icon
 const redIcon = new L.Icon({
@@ -110,8 +112,35 @@ const MyMap = () => {
   const [hospitals, setHospitals] = useState([]);
   const [routes, setRoutes] = useState([]);
   const [shortestRouteIdx, setShortestRouteIdx] = useState(null);
+  const { hospitals: liveHospitals } = useContext(AppContext);
+
+  const normalizedLiveHospitals = useMemo(
+    () =>
+      liveHospitals
+        .filter(
+          (hospital) => hospital.latitude !== undefined && hospital.longitude !== undefined
+        )
+        .map((hospital) => ({
+          lat: Number(hospital.latitude),
+          lon: Number(hospital.longitude),
+          tags: {
+            name: hospital.name,
+            disease: hospital.disease,
+            bedsAvailable: hospital.bedsAvailable ?? hospital.queue,
+            estimatedWaitMins: hospital.estimatedWaitMins ?? hospital.travel,
+            available: hospital.available,
+            rating: hospital.rating,
+          },
+        })),
+    [liveHospitals]
+  );
 
   const fetchHospitals = async (lat, lon) => {
+    if (normalizedLiveHospitals.length > 0) {
+      setHospitals(normalizedLiveHospitals);
+      return;
+    }
+
     const query = `
         [out:json];
         (
@@ -166,13 +195,50 @@ const MyMap = () => {
 
   const drawRoute = async (lat, lon) => {
     try {
+      const googleApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
+      if (googleApiKey) {
+        const { data } = await axios.get(
+          "https://maps.googleapis.com/maps/api/directions/json",
+          {
+            params: {
+              origin: `${position[0]},${position[1]}`,
+              destination: `${lat},${lon}`,
+              mode: "driving",
+              departure_time: "now",
+              traffic_model: "best_guess",
+              key: googleApiKey,
+            },
+          }
+        );
+
+        const route = data.routes?.[0];
+        if (route?.overview_polyline?.points) {
+          const coords = polyline
+            .decode(route.overview_polyline.points)
+            .map(([routeLat, routeLon]) => [routeLat, routeLon]);
+          const duration =
+            route.legs?.[0]?.duration_in_traffic?.value ??
+            route.legs?.[0]?.duration?.value;
+          const distance = route.legs?.[0]?.distance?.value;
+          const newRoute = { coords, distance, duration };
+          setRoutes([newRoute]);
+          setShortestRouteIdx(0);
+          return;
+        }
+      }
+
       const response = await axios.get(
         `https://router.project-osrm.org/route/v1/driving/${position[1]},${position[0]};${lon},${lat}?overview=full&geometries=geojson`
       );
       const coords = response.data.routes[0].geometry.coordinates.map(
-        ([lng, lat]) => [lat, lng]
+        ([lng, routeLat]) => [routeLat, lng]
       );
-      const newRoute = { coords, distance: response.data.routes[0].distance };
+      const newRoute = {
+        coords,
+        distance: response.data.routes[0].distance,
+        duration: response.data.routes[0].duration,
+      };
       setRoutes([newRoute]);
       setShortestRouteIdx(0);
     } catch (err) {
@@ -215,6 +281,8 @@ const MyMap = () => {
         {hospitals.map((hospital, idx) => {
           const lat = hospital.lat || hospital.center?.lat;
           const lon = hospital.lon || hospital.center?.lon;
+          const bedsAvailable = hospital.tags?.bedsAvailable ?? hospital.tags?.queue;
+          const estimatedWaitMins = hospital.tags?.estimatedWaitMins ?? hospital.tags?.travel;
           const dist = haversineDistance(
             position[0],
             position[1],
@@ -231,6 +299,8 @@ const MyMap = () => {
                     onClick={() => drawRoute(lat, lon)}
                   >
                     🏥 {hospital.tags?.name || "Unnamed Hospital"} <br />
+                    🛏️ Beds available: {bedsAvailable ?? "Unknown"} <br />
+                    ⏱️ Wait time: {estimatedWaitMins ?? "Unknown"} mins <br />
                     📍 {dist} km away <br />
                     🧭 Click to get route
                   </div>

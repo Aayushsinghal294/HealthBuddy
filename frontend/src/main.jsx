@@ -4,13 +4,18 @@ import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import AppContextProvider from "./context/AppContext.jsx";
+import ToastProvider from './context/ToastContext'
+import ToastContainer from './components/ToastContainer'
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <div className="bg-yellow-50 min-h-screen">
       <BrowserRouter>
         <AppContextProvider>
-          <App />
+          <ToastProvider>
+            <App />
+            <ToastContainer />
+          </ToastProvider>
         </AppContextProvider>
       </BrowserRouter>
     </div>

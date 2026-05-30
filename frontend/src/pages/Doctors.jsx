@@ -8,6 +8,9 @@ const Doctors = () => {
   const [filterDoc, setFilterDoc] = useState([]);
   const { hospitals } = useContext(AppContext);
 
+  const getBedsAvailable = (hospital) => hospital.bedsAvailable ?? hospital.queue ?? 0;
+  const getWaitMinutes = (hospital) => hospital.estimatedWaitMins ?? hospital.travel ?? 0;
+
   const applyFilter = () => {
     if (disease) {
       setFilterDoc(hospitals.filter((doc) => doc.disease === disease));
@@ -108,9 +111,9 @@ const Doctors = () => {
                     <div className="mt-auto flex items-center justify-between text-sm">
                       <p className="text-blue-700 font-medium">
                         Total time:{" "}
-                        {parseInt(item.queue) + parseInt(item.travel)} mins
+                        {Number(getBedsAvailable(item)) + Number(getWaitMinutes(item))} mins
                         {/* <span className="text-xs text-gray-500 ml-1">
-                          (Queue + Travel)
+                          (Beds + Wait)
                         </span> */}
                       </p>
                       <p className="text-yellow-600 font-semibold">

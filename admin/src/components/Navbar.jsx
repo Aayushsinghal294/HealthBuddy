@@ -1,17 +1,25 @@
 import React, { useContext } from 'react'
 import { assets } from '../assets/asset'
 import { AdminContext } from '../context/AdminContext'
+import { DoctorContext } from '../context/DoctorContext'
 import { useNavigate } from 'react-router-dom'
 
 const Navbar = () => {
   const { aToken , setAToken} = useContext(AdminContext)
+  const { hToken, logoutHospital } = useContext(DoctorContext)
 
   const navigate = useNavigate()
 
   const logout = () => {
     navigate('/')
-       aToken && setAToken('')
-       aToken && localStorage.removeItem('aToken')
+    if (aToken) {
+      setAToken('')
+      localStorage.removeItem('aToken')
+    }
+
+    if (hToken) {
+      logoutHospital()
+    }
   }
 
   return (
@@ -19,7 +27,7 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         <img src={assets.logo} alt="Logo" className="h-10 w-auto object-contain" />
         <p className="text-lg font-semibold text-gray-700">
-          {aToken ? 'Admin' : 'Doctor'} Panel
+          {aToken ? 'Admin' : 'Hospital'} Panel
         </p>
       </div>
 

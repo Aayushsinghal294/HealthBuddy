@@ -1,18 +1,18 @@
 
 import validator from "validator"
-import DoctorModel from "../models/doctorModel.js";
 import bcrypt from "bcrypt"
 import {v2 as cloudinary} from "cloudinary"
 import jwt from "jsonwebtoken"
+import HospitalModel from "../models/hospitalModel.js";
 
 
 const addDoctor = async (req, res) => {
 
 try{
-    const { name, email, password, phone, address, image, disease, queue, travel, rating, about, available, date } = req.body;
+    const { name, email, password, phone, address, image, disease, queue, travel, rating, about, available, latitude, longitude } = req.body;
     const imageFile = req.file
 
-   if(!name || !email || !password || !phone || !address || !image || !disease || !queue || !travel || !rating || !about || !available || !date){
+   if(!name || !email || !password || !phone || !address || !image || !disease || !queue || !travel || !rating || !about || available === undefined){
     return res.json({success:false, message:"Please fill all the fields"})
    }
 
@@ -30,7 +30,7 @@ const hashedPassword = await bcrypt.hash(password, salt);
 const imageUpload = await cloudinary.uploader.upload(imageFile.path, {resource_type: "image"})
 const imageUrl = imageUpload.secure_url
 
-const doctorData = {
+const hospitalData = {
     name,
     email,
     password: hashedPassword,
@@ -38,18 +38,23 @@ const doctorData = {
     address:JSON.parse(address),
     image: imageUrl,
     disease,
-    queue,
-    travel,
-    rating,
+    queue: Number(queue),
+    bedsAvailable: Number(queue),
+    travel: Number(travel),
+    estimatedWaitMins: Number(travel),
+    rating: Number(rating),
     about,
-    available,
-    date:Date.now()
+    available: available === true || available === "true",
+    latitude: latitude !== undefined && latitude !== "" ? Number(latitude) : undefined,
+    longitude: longitude !== undefined && longitude !== "" ? Number(longitude) : undefined,
+    date:Date.now(),
+    lastUpdated: Date.now(),
 }
 
-const newDoctor = new DoctorModel(doctorData)
-await newDoctor.save()
+const newHospital = new HospitalModel(hospitalData)
+await newHospital.save()
 
-res.json({success:true, message:"Doctor added successfully"})
+res.json({success:true, message:"Hospital added successfully"})
     
 }catch(error){
 console.log(error)

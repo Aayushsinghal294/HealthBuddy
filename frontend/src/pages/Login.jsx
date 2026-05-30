@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AppContext } from "../context/AppContext";
+import { toast } from 'react-toastify'
 
 const Login = () => {
   const [state, setState] = useState("Sign Up");
@@ -8,7 +10,17 @@ const Login = () => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log({ name, email, password, state });
+    if (state === 'Sign Up') {
+      const res = await register({ name, email, password })
+      if (res.success) {
+        toast.success('Registered and logged in')
+      } else toast.error(res.message || 'Register failed')
+    } else {
+      const res = await login({ email, password })
+      if (res.success) {
+        toast.success('Logged in')
+      } else toast.error(res.message || 'Login failed')
+    }
   };
 
   return (

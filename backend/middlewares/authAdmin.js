@@ -5,7 +5,7 @@ const authAdmin = async (req, res, next) => {
 
     try{
 
-        const {atoken} = req.headers
+        const atoken = req.headers.atoken || req.headers.aToken
         if(!atoken){
             return res.json({success:false, message:"Please login first"})
         }

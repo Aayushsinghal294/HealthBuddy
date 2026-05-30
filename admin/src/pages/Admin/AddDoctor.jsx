@@ -14,6 +14,8 @@ const AddDoctor = () => {
   const [rating, setRating] = useState('');
   const [about, setAbout] = useState('');
   const [address, setAddress] = useState('');
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
   const [disease, setDisease] = useState('Viral Disease');
   const [available, setAvailable] = useState(false);
   const [phone, setPhone] = useState('');
@@ -35,6 +37,8 @@ const AddDoctor = () => {
         rating,
         about,
         address,
+        latitude,
+        longitude,
         disease,
         available,
         phone,
@@ -54,6 +58,8 @@ const AddDoctor = () => {
       formData.append('rating', rating);
       formData.append('about', about);
       formData.append('address', address);
+      formData.append('latitude', latitude);
+      formData.append('longitude', longitude);
       formData.append('disease', disease);
       formData.append('available', available ? true : false);
       formData.append('phone', phone);
@@ -145,6 +151,34 @@ const AddDoctor = () => {
               className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 transition resize-none"
               required
             ></textarea>
+          </div>
+
+          {/* Latitude */}
+          <div>
+            <label className="block text-gray-700 font-semibold mb-1">Latitude</label>
+            <input
+              onChange={(e) => setLatitude(e.target.value)}
+              value={latitude}
+              type="number"
+              step="any"
+              name="latitude"
+              placeholder="Enter hospital latitude"
+              className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 transition"
+            />
+          </div>
+
+          {/* Longitude */}
+          <div>
+            <label className="block text-gray-700 font-semibold mb-1">Longitude</label>
+            <input
+              onChange={(e) => setLongitude(e.target.value)}
+              value={longitude}
+              type="number"
+              step="any"
+              name="longitude"
+              placeholder="Enter hospital longitude"
+              className="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 transition"
+            />
           </div>
 
           {/* Disease Specialization */}
