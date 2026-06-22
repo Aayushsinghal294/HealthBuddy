@@ -24,14 +24,14 @@ const Doctors = () => {
   }, [hospitals, disease]);
 
   return (
-    <div className="p-6 text-gray-900 h-[100vh] overflow-hidden">
-      <p className="text-xl font-semibold text-center mb-4">
+    <div className="p-6 text-gray-900 h-[100vh] overflow-hidden container-max">
+      <p className="text-xl font-semibold text-center mb-6">
         Browse through Hospitals Based on Disease
       </p>
 
       <div className="flex flex-col md:flex-row gap-6 h-[calc(100%-4rem)]">
         {/* Sidebar */}
-        <div className="md:w-1/4 h-full p-4 border-r bg-yellow-100 border-gray-300 flex flex-col justify-between">
+        <div className="md:w-1/4 h-full p-4 border-r bg-[var(--primary-50)] border-gray-200 flex flex-col justify-between rounded-lg">
           {/* Top Fixed Header */}
           <div>
             <p className="font-medium text-lg mb-4 text-gray-800">
@@ -39,7 +39,7 @@ const Doctors = () => {
             </p>
 
             {/* Scrollable Disease List */}
-            <div className="flex flex-col gap-5 max-h-[calc(100vh-16rem)] overflow-y-auto pr-2">
+            <div className="flex flex-col gap-4 max-h-[calc(100vh-16rem)] overflow-y-auto pr-2">
               {[
                 "Viral Disease",
                 "Heart Problem",
@@ -56,8 +56,7 @@ const Doctors = () => {
               ].map((dis, index) => (
                 <button
                   key={index}
-                  className="px-4 py-2 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-300 rounded-lg 
-                  hover:bg-emerald-800 hover:text-white transition-all duration-300 ease-in-out active:scale-95 focus:outline-none"
+                  className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 active:scale-95 focus:outline-none"
                   onClick={() => navigate(`/doctors/${dis}`)}
                 >
                   {dis}
@@ -72,8 +71,7 @@ const Doctors = () => {
               Select Hospital on Map:
             </p>
             <button
-              className="px-4 py-2 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-300 rounded-lg 
-              hover:bg-emerald-800 hover:text-white transition-all duration-300 ease-in-out active:scale-95 focus:outline-none"
+              className="px-4 py-2 text-sm font-medium text-gray-50 bg-[var(--primary-500)] rounded-lg shadow-sm hover:brightness-95 transition"
               onClick={() => navigate("/contact")}
             >
               Open Map
@@ -89,7 +87,7 @@ const Doctors = () => {
                 <div
                   onClick={() => navigate(`/appointment/${item._id}`)}
                   key={index}
-                  className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-all duration-500 flex flex-col h-full"
+                  className="card overflow-hidden cursor-pointer hover:-translate-y-2 transition-all duration-500 flex flex-col h-full"
                 >
                   <img
                     className="bg-blue-50 w-full h-48 object-cover"

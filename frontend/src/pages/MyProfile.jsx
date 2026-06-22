@@ -99,7 +99,8 @@ const MyProfile = () => {
           <img
             src={userData.image}
             alt="Profile"
-            className="w-24 h-24 rounded-full object-cover border-4 border-blue-500"
+            className="w-24 h-24 rounded-full object-cover border-4"
+            style={{ borderColor: 'var(--primary-500)' }}
           />
           <div>
             {editMode ? (

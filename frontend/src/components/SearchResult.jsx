@@ -26,7 +26,7 @@ const SearchResults = () => {
   return (
     <div className="px-6 md:px-28 py-10">
       <h2 className="text-2xl font-semibold mb-6 text-center">
-        Hospitals for: <span className="text-[var(--brand-500)]">{disease}</span>
+        Hospitals for: <span className="text-[var(--primary-500)]">{disease}</span>
       </h2>
 
       {matchedHospitals.length > 0 ? (
@@ -61,7 +61,7 @@ const SearchHospitalTile = ({ item, onClick }) => {
   }, [item.lastUpdated])
 
   return (
-    <div onClick={onClick} className="bg-white rounded-xl overflow-hidden cursor-pointer hover:-translate-y-1 transition-transform duration-300 card-shadow relative">
+    <div onClick={onClick} className="card rounded-xl overflow-hidden cursor-pointer hover:-translate-y-1 transition-transform duration-300 relative">
       <img src={item.image} alt={item.name} className="w-full h-44 sm:h-56 object-cover" />
       {justUpdated && <div className="absolute right-3 top-3 bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">Live</div>}
       <div className="p-4">

@@ -8,7 +8,8 @@ const Navbar = () => {
   const { hospitals, user, logout } = useContext(AppContext);
 
   const [query, setQuery] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const inputRef = useRef(null);
 
@@ -73,7 +74,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex flex-col gap-3 md:flex-row md:items-center justify-between px-4 md:px-8 py-3 sticky top-0 z-50 bg-white glass">
+    <nav className="flex flex-col gap-3 md:flex-row md:items-center justify-between px-4 md:px-8 py-3 sticky top-0 z-50 navbar">
       <div className="flex items-center justify-between w-full md:w-auto">
         <img
           onClick={() => navigate("/")}
@@ -85,8 +86,9 @@ const Navbar = () => {
 
       <button
         className="md:hidden px-2 py-1 text-gray-600"
-        onClick={() => setShowDropdown((s) => !s)}
-        aria-label="Open menu"
+        onClick={() => setShowMenu((s) => !s)}
+        aria-label="Toggle navigation"
+        aria-expanded={showMenu}
       >
         ☰
       </button>
@@ -134,6 +136,18 @@ const Navbar = () => {
         </NavLink>
       </ul>
 
+      {/* Mobile menu */}
+      {showMenu && (
+        <div className="md:hidden mt-2 w-full bg-white rounded-lg shadow p-4">
+          <ul className="flex flex-col gap-3 text-gray-800">
+            <li onClick={() => { navigate('/'); setShowMenu(false) }} className="py-2">Home</li>
+            <li onClick={() => { navigate('/doctors'); setShowMenu(false) }} className="py-2">All Hospitals</li>
+            <li onClick={() => { navigate('/about'); setShowMenu(false) }} className="py-2">Search</li>
+            <li onClick={() => { navigate('/contact'); setShowMenu(false) }} className="py-2">Maps</li>
+          </ul>
+        </div>
+      )}
+
       <div className="relative w-full rounded-xl bg-amber-50 md:w-80 mt-2 md:mt-0">
         <input
           type="text"
@@ -142,10 +156,10 @@ const Navbar = () => {
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
-            setShowDropdown(true);
+            setShowSearch(true);
           }}
-          onFocus={() => setShowDropdown(true)}
-          onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
+          onFocus={() => setShowSearch(true)}
+          onBlur={() => setTimeout(() => setShowSearch(false), 150)}
           onKeyDown={handleKeyDown}
           ref={inputRef}
         />
@@ -160,8 +174,8 @@ const Navbar = () => {
             ×
           </button>
         )}
-        {showDropdown && (
-          <ul className="absolute z-10 mt-1 bg-white border border-gray-300 rounded w-full max-h-60 overflow-y-auto shadow-lg">
+        {showSearch && (
+          <ul className="absolute z-50 mt-1 bg-white border border-gray-300 rounded w-full max-h-60 overflow-y-auto shadow-lg">
             {filteredData.length > 0 ? (
               filteredData.map((item, i) => (
                 <li
@@ -229,17 +243,6 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Mobile menu */}
-      {showDropdown && (
-        <div className="md:hidden mt-2 bg-white w-full p-4 border-t">
-          <ul className="flex flex-col gap-3">
-            <li onClick={() => navigate('/')} className="py-2">Home</li>
-            <li onClick={() => navigate('/doctors')} className="py-2">All Hospitals</li>
-            <li onClick={() => navigate('/about')} className="py-2">Search</li>
-            <li onClick={() => navigate('/contact')} className="py-2">Maps</li>
-          </ul>
-        </div>
-      )}
     </nav>
   );
 };

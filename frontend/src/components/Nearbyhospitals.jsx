@@ -10,7 +10,7 @@ const Nearbyhospitals = () => {
   const getWaitMinutes = (hospital) => hospital.estimatedWaitMins ?? hospital.travel ?? 0;
 
   return (
-    <section className="flex flex-col items-center gap-6 my-12 text-gray-900 px-4 md:px-12 lg:px-24">
+    <section className="flex flex-col items-center gap-6 my-12 text-gray-900 px-4 md:px-12 lg:px-24 container-max">
       <h1 className="text-2xl md:text-3xl font-semibold text-center">Hospitals Nearby You</h1>
       <p className="text-center text-gray-600 max-w-xl">
         Skip the guesswork — recommendations based on availability and estimated wait time.
@@ -27,7 +27,7 @@ const Nearbyhospitals = () => {
           navigate("/doctors");
           scrollTo(0, 0);
         }}
-        className="mt-8 px-6 py-3 bg-[var(--brand-500)] text-white rounded-full hover:brightness-95 transition"
+        className="mt-8 btn-primary"
       >
         View All Hospitals
       </button>
@@ -50,7 +50,7 @@ const HospitalTile = ({ item, onClick }) => {
   }, [item.lastUpdated]);
 
   return (
-    <div onClick={onClick} className={`bg-white rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden flex flex-col card-shadow relative`}>
+    <div onClick={onClick} className={`card rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden flex flex-col relative`}>
       <img src={item.image} alt={item.name} className="h-40 w-full object-cover" />
       {justUpdated && <div className="absolute right-3 top-3 bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">Live</div>}
       <div className="p-4 flex flex-col gap-2 flex-grow">
@@ -69,7 +69,7 @@ const HospitalTile = ({ item, onClick }) => {
           <p className="text-yellow-600 font-semibold">⭐ {item.rating || 0}</p>
         </div>
 
-        <button className="mt-4 bg-[var(--brand-500)] text-white px-4 py-2 rounded-full text-sm w-fit hover:brightness-95 transition">
+        <button className="mt-4 btn-primary text-sm w-fit">
           Book Now
         </button>
       </div>

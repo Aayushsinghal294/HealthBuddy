@@ -62,7 +62,7 @@ const Login = () => {
 
           <button
             type="submit"
-            className="p-3 bg-blue-500 text-white font-medium rounded-md hover:bg-blue-600 transition-all"
+            className="btn-primary font-medium rounded-md w-full text-center"
           >
             {state === "Sign Up" ? "Sign Up" : "Login"}
           </button>
